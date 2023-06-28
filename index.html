@@ -1,61 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Etch-A-Sketch</title>
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        body {
+            font-family: Roboto;
+            font-size: 12px
+        }
         .grid_sq {
-            
-            width: 20px;
-            height: 20px;
-            border: 1px solid black;
+            display:flex;
+            flex: 1 1 auto; 
+            /* border: 1px solid black; */
             background-color: transparent;
         }
 
         .grid_row {
             display: flex;
-            align-items: center;
-            gap: 3px;
+            justify-content: space-between;
+            /* gap: 3px; */
+            flex: 1 1 auto;
+        } 
+
+        button.reset_grid {
+            margin: 12px 0;
+            padding: 20px;
+            /* width: 50px;
+            height: 20px; */
+            border: 0
         }
+
         .sketch_grid {
             padding: 20px;
-            display: flex;
+            display: flex; 
+            /* align-items: center; */
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 3px;
+            /* gap: 3px; */
+            max-width: 600px;
+            min-width: 600px;
+            max-height: 600px;
+            min-height: 600px;
+            border: 1px solid rgb(82, 76, 76);
         }
-
-
     </style>
     <script>
+        let reset_grid
 
-        function div() { return document.createElement('div')}
+        function div() { return document.createElement('div') }
 
         function createGrid(nGridsSquare = 16) {
-            let grid = document.querySelector('.sketch_grid')
+            let grid = document.querySelector('.sketch_grid');
+            document.querySelectorAll('.grid_row').forEach(row => grid.removeChild(row));
+
+            // grid.innerHTML = ''
             for (let r = 0; r < nGridsSquare; r++) {
                 let row = div();
                 row.classList.add("row_" + nGridsSquare, 'grid_row');
                 row.id = "row_" + r;
                 for (let c = 0; c < nGridsSquare; c++) {
-                    let grid_div = div()
-                    grid_div.classList.add( 'c_' + c, 'grid_sq');
-                    grid_div.id = 'r_' + r + '.c_' + c
-                    row.appendChild(grid_div)
+                    let grid_div = div();
+                    grid_div.classList.add('c_' + c, 'grid_sq');
+                    grid_div.id = 'r_' + r + '.c_' + c;
+                    row.appendChild(grid_div);
+                    // grid.appendChild(grid_div);
                 }
-                grid.appendChild(row)
+                grid.appendChild(row);
             }
-            document.body.appendChild(grid)
+            setHoverEvents()
+            reset_grid = document.querySelector('button.reset_grid')
+            reset_grid.addEventListener('click', resetGrid)
         }
 
-        // window.onload = createGrid
+        function setHoverEvents() {
+            let grid = document.querySelector('.sketch_grid');
+            let grid_sqs = grid.querySelectorAll('.grid_sq');
+            grid_sqs.forEach(sq => {
+                sq.addEventListener('mouseenter', evt => {
+                    r = Math.floor(Math.random() * 256).toString(16)
+                    g = Math.floor(Math.random() * 256).toString(16)
+                    b = Math.floor(Math.random() * 256).toString(16)
+                    evt.target.style.backgroundColor = '#' + r + g + b
+                })
+                // sq.addEventListener('mouseleave', evt => {
+                //     setTimeout(resetBackground(evt.target), 5000)
+                // })
+            })
+        }
+
+        function resetBackground(target) {
+            target.style.backgroundColor = '#ffffff'
+        }
+
+        function resetGrid() {
+            res = prompt('Reset Grid: enter grid edge size: \na positive number less than 100', 16)
+            if (!isNaN(res) && Number(res) > 0 && Number(res) <= 100) {
+                createGrid(Number(res))
+            } else {
+                return
+            }
+        }
+        window.onload = createGrid
 
     </script>
 </head>
+
 <body>
+    <div class="header">
+        <h1>Etch a sketch</h1>
+        <p>move cursor over the canvas, the grid squares will change colour </p>
+        <p>Click reset button to recreate a blank canvas</p>
+    </div>
+    <button class="reset_grid">Reset Grid</button>
     <div class="sketch_grid"></div>
 </body>
+
 </html>
