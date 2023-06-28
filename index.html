@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etch-A-Sketch</title>
+
+    <style>
+        .grid_sq {
+            
+            width: 20px;
+            height: 20px;
+            border: 1px solid black;
+            background-color: transparent;
+        }
+
+        .grid_row {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .sketch_grid {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+        }
+
+
+    </style>
+    <script>
+
+        function div() { return document.createElement('div')}
+
+        function createGrid(nGridsSquare = 16) {
+            let grid = document.querySelector('.sketch_grid')
+            for (let r = 0; r < nGridsSquare; r++) {
+                let row = div();
+                row.classList.add("row_" + nGridsSquare, 'grid_row');
+                row.id = "row_" + r;
+                for (let c = 0; c < nGridsSquare; c++) {
+                    let grid_div = div()
+                    grid_div.classList.add( 'c_' + c, 'grid_sq');
+                    grid_div.id = 'r_' + r + '.c_' + c
+                    row.appendChild(grid_div)
+                }
+                grid.appendChild(row)
+            }
+            document.body.appendChild(grid)
+        }
+
+        // window.onload = createGrid
+
+    </script>
+</head>
+<body>
+    <div class="sketch_grid"></div>
+</body>
+</html>
